@@ -34,6 +34,10 @@ psvn2c_abstraction.c:
 	$(CXX) $(OPT) ../global/distSummary.cpp -include $< -o $@
 	rm -f $*.c
 
+%.nodes: %.c ../global/nodes.c
+	$(CC) $(OPT) ../global/nodes.c -include $< -o $@
+	rm -f $*.c
+
 abstractor:
 	$(CXX) $(OPT) ../src/abstractor.cpp ../src/psvn.cpp -o $@
 
@@ -50,4 +54,4 @@ abstractor:
 
 .PHONY: clean
 clean:
-	rm -fr *.succ *.dist *.distSummary *.dist_pdb psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c abstractor *.dSYM *.o *~
+	rm -fr *.succ *.dist *.distSummary *.dist_pdb *.nodes psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c abstractor *.dSYM *.o *~
