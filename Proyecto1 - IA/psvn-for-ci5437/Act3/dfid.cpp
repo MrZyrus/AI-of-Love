@@ -1,80 +1,111 @@
 #include <iostream>
-#include <string>
-#include <ctime>
-#include <cstdio>
+#include <fstream> 
 
 using namespace std;
 
-unsigned long long nodes_generated = 0;
+long long nodes_generated = 0;
+bool limit = false;
+double secs;
 
 int dfidVisit(state_t,int,int,int);
-int dfid (state_t);
+//int dfid (state_t);
 
-int main(){
+int main(int argc, char* argv[]) {
+
 	state_t root;
+	int aux;
+	unsigned d = 0;
+	int hist;
 	string state_string;
-	int r;
-	cout << "Enter State: " << endl;
+	char stateArray[256];
+	clock_t begin,end;
+    
+	ifstream file (argv[1]);
+	std::string path = argv[1];
+	ofstream outfile (argv[2]);
+	outfile << "grupo, algorithm, domain, instance, cost, generated, time, gen_per_sec\n";
+	
+	if (file.is_open()){
 
-	getline(cin,state_string);
+		while ( getline (file,state_string) ){
+		  	
+			strncpy(stateArray, state_string.c_str(), sizeof(stateArray));
+			stateArray[sizeof(stateArray) - 1] = 0;
+			hist = init_history;
+			read_state(stateArray,&root);
+			nodes_generated++;
 
-	if (read_state(state_string.c_str(),&root) == -1){
+			begin = clock();
 
-		cout << "Incorrect State." << endl;
-		int goal;
-		first_goal_state(&root,&goal);
+			while(true){
+				aux = dfidVisit(root,0,d,hist);
+				if (aux != -1) break; 
+				d++;
+				if(secs > 600 || limit){	// 10 minutes
+					limit = true;
+					break;
+				}
+			}
+			end = clock();
 
-		cout << "The goal is: " << endl;
-		print_state(stdout,&root);
-		cout << endl;
-		return 0;
+			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			double gen_per_sec = double(nodes_generated)/elapsed_secs;
+			
+			if (!limit){
+				outfile << "x, dfid, ";
+				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
+				outfile << "'" << stateArray << "', ";
+				outfile << aux << ", ";
+				outfile << nodes_generated << ", ";
+				outfile << elapsed_secs << ", ";
+				outfile << gen_per_sec << endl;
+			}
+			else {
+				outfile << "x, dfid, ";
+				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
+				outfile << "'" << stateArray << "', ";
+				outfile << "na, na, na, na "<< endl;
+				limit = false; 
+			}
+			nodes_generated = 0;
+			aux = 0;
+			d = 0;
+		}
+
+		file.close();
+		outfile.close();
 	}
-
-	nodes_generated = 0;
-
-	clock_t begin = clock();
-
-	r = dfid(&root);
-
-	clock_t end = clock();
-
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-	double gen_per_sec = double(nodes_generated)/elapsed_secs;
-
-	cout << " algorithm, domain, instance, cost, generated, time, gen_per_sec " << endl;
-
-	cout << " dfid ," << state_string << ", " << r;
-	cout << ", " << nodes_generated << ", " << elapsed_secs << ", ";
-	cout << gen_per_sec << endl;
 
 }
 
-
-void dfid(state_t root){
+/*
+int dfid(state_t root){
+	
+	if (is_goal(&root)) return 0;
 	int aux;
 	int bound = 0;
 	int hist = init_history;
 	while(true){
-		aux = dfidVisit(&root,0,bound,hist); 
-		if (aux < 0){
+		aux = dfidVisit(root,0,bound,hist); 
+		if (aux != -1){
 			return aux;
 		}
 		bound++;
 	}
 }
+*/
 
-int dfidVisit(state_t state, int bound, int actCost, int hist){
+int dfidVisit(state_t state, int bound, int maxBound, int hist){
 	
 	int ruleID, nextHist, aux;
 	ruleid_iterator_t iter;
 	state_t child;
 	
-	if ( bound + 1 >= actCost){ 
+	if ( bound + 1 >= maxBound){ 
 		return -1;
 	}
-
 	if (is_goal(&state)){
-		return bound+1;
+		return bound;  
 	}
 
 	init_fwd_iter(&iter,&state);
@@ -85,9 +116,13 @@ int dfidVisit(state_t state, int bound, int actCost, int hist){
 		nextHist = next_fwd_history(hist,ruleID);
 		apply_fwd_rule(ruleID, &state, &child);
 		nodes_generated++; 
-		aux = dfidVisit(child,bound+1,actCost,nextHist);
+
+		aux = dfidVisit(child,bound+1,maxBound,nextHist);
 		if (aux != -1) return aux; 
 	}
 
 	return -1;
 }
+
+
+
