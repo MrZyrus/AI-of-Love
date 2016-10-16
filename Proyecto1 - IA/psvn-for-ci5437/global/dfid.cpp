@@ -1,11 +1,13 @@
 #include <iostream>
 #include <fstream> 
+#include <sys/time.h>
 
 using namespace std;
 
 long long nodes_generated = 0;
 bool limit = false;
 double secs;
+time_t begint,endt;
 
 int dfidVisit(state_t,int,int,int);
 //int dfid (state_t);
@@ -36,6 +38,7 @@ int main(int argc, char* argv[]) {
 			nodes_generated++;
 
 			begin = clock();
+			begint = time(NULL);
 
 			while(true){
 				aux = dfidVisit(root,0,d,hist);
@@ -100,6 +103,9 @@ int dfidVisit(state_t state, int bound, int maxBound, int hist){
 	int ruleID, nextHist, aux;
 	ruleid_iterator_t iter;
 	state_t child;
+
+	endt = time(NULL);
+	secs = difftime(endt,begint);
 	
 	if ( bound + 1 >= maxBound){ 
 		return -1;
