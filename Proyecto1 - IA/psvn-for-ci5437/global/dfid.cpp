@@ -44,10 +44,7 @@ int main(int argc, char* argv[]) {
 				aux = dfidVisit(root,0,d,hist);
 				if (aux != -1) break; 
 				d++;
-				if(secs > 600 || limit){	// 10 minutes
-					limit = true;
-					break;
-				}
+				
 			}
 			end = clock();
 
@@ -106,6 +103,11 @@ int dfidVisit(state_t state, int bound, int maxBound, int hist){
 
 	endt = time(NULL);
 	secs = difftime(endt,begint);
+	
+	if(secs > 600 || limit){	// 10 minutes
+		limit = true;
+		return -2;
+	}
 	
 	if ( bound + 1 >= maxBound){ 
 		return -1;
