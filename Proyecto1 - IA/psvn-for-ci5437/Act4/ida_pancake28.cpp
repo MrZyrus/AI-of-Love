@@ -29,7 +29,7 @@ int gap(state_t state){
 	first = atoi(curr.c_str());
 	iss >> curr;
 	second = atoi(curr.c_str());
-	while(i<27){
+	while(i<27){ 
 		if(abs(first-second) > 1)
 			sum++;
 		first = second;
