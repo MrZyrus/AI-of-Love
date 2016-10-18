@@ -20,7 +20,7 @@ int manhatan(state_t state){
 	int sum = 0;
 	
 	while(i<16){
-		if (curr == "B");
+		if (curr == "B")
 			continue;
 		first = atoi(curr.c_str());
 		int row = first/4;
