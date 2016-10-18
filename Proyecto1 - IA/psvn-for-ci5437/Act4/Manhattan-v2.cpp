@@ -19,9 +19,11 @@ int manhatan(state_t state){
 	int i =0;
 	int sum = 0;
 	
-	while(i<16){
-		if (curr == "B")
+	while(i<15){
+		if (curr == "B"){
+			iss >> curr;
 			continue;
+		}
 		first = atoi(curr.c_str());
 		int row = first/4;
 		int col = first % 4;
