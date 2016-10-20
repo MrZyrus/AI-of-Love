@@ -122,7 +122,7 @@ int idaVisit(state_t state, int bound, int maxBound,int hist){
 	secs = difftime(endt,begint);
 	if(secs > 600 || limit){	// 10 minutes
 		limit = true;
-		return 2;
+		return 0;
 	}
 	int f = bound + gap(state); 
 	if ( f > maxBound){
