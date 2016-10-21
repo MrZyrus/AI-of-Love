@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 	ifstream file (argv[1]);
 	std::string path = argv[1];
 	ofstream outfile (argv[2]);
-	outfile << "grupo, algorithm, heuristic, domain, instance, cost, h0, generated, time, gen_per_sec\n";
+	outfile << "grupo, algorithm, heuristic, weight, domain, instance, cost, h0, generated, time, gen_per_sec\n";
 	
 	if (file.is_open()){
 
@@ -97,6 +97,7 @@ int main(int argc, char* argv[]) {
 			if (!limit){
 				outfile << "x, wida, manhattan, ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
+				outfile << weight << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << aux << ", ";
 				outfile << h0 << ", ";
@@ -106,6 +107,7 @@ int main(int argc, char* argv[]) {
 			}
 			else {
 				outfile << "x, wida, manhattan, ";
+				outfile << weight << ", ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << "na, na, na, na, na "<< endl;
