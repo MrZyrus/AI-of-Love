@@ -14,14 +14,14 @@ time_t begint,endt;
 
 
 int idaVisit(state_t,int,int,int);
+int pdb(state_t);
 
-
-state_map_t* pdb1;
-state_map_t* pdb2;       
-state_map_t* pdb3;
-abstraction_t* abs1;
-abstraction_t* abs2;
-abstraction_t* abs3;
+state_map_t *pdb1;
+state_map_t *pdb2;       
+state_map_t *pdb3;
+abstraction_t *abs1;
+abstraction_t *abs2;
+abstraction_t *abs3;
 
 
 int main(int argc, char* argv[]) {
@@ -36,22 +36,20 @@ ulimit(UL_SETFSIZE,2000000);
 	char stateArray[256];
 	clock_t begin,end;
 
-	abs1 = read_abstraction_from_file("Act4/PDB/pdb1.abst");
-	abs2 = read_abstraction_from_file("Act4/PDB/pdb2.abst");
-	abs3 = read_abstraction_from_file("Act4/PDB/pdb3.abst");
+	abs1 = read_abstraction_from_file("./PDB/pdb1.abst");
+    abs2 = read_abstraction_from_file("./PDB/pdb2.abst");
+    abs3 = read_abstraction_from_file("./PDB/pdb3.abst");
 
-	FILE* f;
-	f = fopen ("Act4/PDB/pdb1.txt" , "r"); 
-	pdb1 = read_state_map(f);
-	fclose (f);
-	
-	f = fopen ("Act4/pdb2.txt" , "r"); 
-	pdb2 = read_state_map(f);
-	fclose (f);
-	
-	f = fopen ("Act4/pdb3.txt" , "r"); 
-	pdb3 = read_state_map(f);
-	fclose (f);
+    FILE *f = fopen ("./PDB/pdb1.pdb" , "r"); 
+    pdb1 = read_state_map(f);
+    fclose (f);
+    FILE *f2 = fopen ("./PDB/pdb2.pdb" , "r"); 
+    pdb2 = read_state_map(f2);
+    fclose (f2);
+
+    FILE *f3 = fopen ("./PDB/pdb3.pdb" , "r"); 
+    pdb3 = read_state_map(f3);
+    fclose (f3);
     
 	ifstream file (argv[1]);
 	std::string path = argv[1];
@@ -119,12 +117,12 @@ int pdb(state_t state){
 	abstract_state(abs2,&state,&abstrac2);
 	abstract_state(abs3,&state,&abstrac3);
 
-	// Calculo del costo de cada pdb
-	int value1 = *state_map_get(pdb1,&abstrac1); 
-	int value2 = *state_map_get(pdb2,&abstrac2);  
-	int value3 = *state_map_get(pdb3,&abstrac3);  
+    // Calculo del costo de cada pdb
+	const int *value1 = state_map_get(pdb1,&abstrac1); 
+	const int *value2 = state_map_get(pdb2,&abstrac2);
+	const int *value3 = state_map_get(pdb3,&abstrac3);  
 
-	return value1+value2+value3;
+	return *value1+*value2+*value3;
 }
 
 /* Funcion de recorrido usando el algoritmo IDA* con una profundidad de "maxBound"
