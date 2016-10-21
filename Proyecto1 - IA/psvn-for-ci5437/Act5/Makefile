@@ -33,6 +33,14 @@ psvn2c_abstraction.c:
 %.distSummary: %.c ../global/distSummary.cpp
 	$(CXX) $(OPT) ../global/distSummary.cpp -include $< -o $@
 	rm -f $*.c
+	
+%.wida_15puzzle_manhattan: %.c ../global/wida_15puzzle_manhattan.cpp
+	$(CXX) $(OPT) ../global/wida_15puzzle_manhattan.cpp -include $< -o $@
+	rm -f $*.c
+	
+%.wida_pancake28: %.c ../global/wida_pancake28.cpp
+	$(CXX) $(OPT) ../global/wida_pancake28.cpp -include $< -o $@
+	rm -f $*.c
 
 abstractor:
 	$(CXX) $(OPT) ../src/abstractor.cpp ../src/psvn.cpp -o $@
