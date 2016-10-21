@@ -46,6 +46,10 @@ psvn2c_abstraction.c:
 	$(CXX) $(OPT) ./a_star_15puzzle_manhattan.cpp -include $< -o $@
 	rm -f $*.c
 
+%.a_star_15puzzle_pdb: %.c ./a_star_15puzzle_pdb.cpp
+	$(CXX) $(OPT) ./a_star_15puzzle_pdb.cpp -include $< -o $@
+	rm -f $*.c
+
 %.a_star_pancake28: %.c ./a_star_pancake28.cpp
 	$(CXX) $(OPT) ./a_star_pancake28.cpp -include $< -o $@
 	rm -f $*.c
