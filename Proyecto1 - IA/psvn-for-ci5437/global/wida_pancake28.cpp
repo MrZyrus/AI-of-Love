@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 	ifstream file (argv[1]);
 	std::string path = argv[1];
 	ofstream outfile (argv[2]);
-	outfile << "grupo, algorithm, heuristic, domain, instance, cost, h0, generated, time, gen_per_sec\n";
+	outfile << "grupo, algorithm, heuristic, weight, domain, instance, cost, h0, generated, time, gen_per_sec\n";
 	
 	if (file.is_open()){
 
@@ -86,11 +86,12 @@ int main(int argc, char* argv[]) {
 
 			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 			double gen_per_sec = double(nodes_generated)/elapsed_secs;
-			int h0 = manhatan(root)*weight;
+			int h0 = gap(root)*weight;
 			
 			
 			if (!limit){
 				outfile << "x, wida, gap, ";
+				outfile << weight << ", ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << aux << ", ";
@@ -101,6 +102,7 @@ int main(int argc, char* argv[]) {
 			}
 			else {
 				outfile << "x, wida, gap, ";
+				outfile << weight << ", ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << "na, na, na, na, na "<< endl;
@@ -135,7 +137,7 @@ int idaVisit(state_t state, int bound, int maxBound,int hist){
 		limit = true;
 		return 0;
 	}
-	int f = bound + manhatan(state)*weight; 
+	int f = bound + gap(state)*weight; 
 	if ( f > maxBound){
 		return -f;
 	}
