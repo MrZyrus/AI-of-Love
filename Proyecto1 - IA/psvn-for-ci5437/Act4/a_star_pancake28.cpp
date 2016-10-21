@@ -79,7 +79,7 @@ int a_star(state_t state, int hist, int d) {
         
         endt = time(NULL);
         secs = difftime(endt,begint);
-        if(secs > 600) {    // 10 minutes
+        if(secs > 300) {    // 5 minutes
             limit = true;
             return 0;
         }
