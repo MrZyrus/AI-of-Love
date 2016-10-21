@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
             gen_per_sec = double(nodes_generated)/elapsed_secs;
 
             if (!limit){
-                outfile << "x, a_star, manhattan, ";
+                outfile << "x, a_star, gap, ";
                 outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
                 outfile << "'" << stateArray << "', ";
                 outfile << aux << ", ";
@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
             }
 
             else {
-                outfile << "x, a_star, manhattan, ";
+                outfile << "x, a_star, gap, ";
                 outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
                 outfile << "'" << stateArray << "', ";
                 outfile << "na, na, na, na, na "<< endl;
