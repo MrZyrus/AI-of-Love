@@ -95,22 +95,18 @@ int main(int argc, char* argv[]) {
     abs2 = read_abstraction_from_file("./PDB/pdb2.abst");
     abs3 = read_abstraction_from_file("./PDB/pdb3.abst");
 
-    
-    //FILE* f;
-    FILE *f = fopen ("./PDB/pdb1.txt" , "r"); 
-    printf("hola2\n");
-    state_map_t *pdb1 = read_state_map(f);
-    printf("hola\n");
+    printf("Before pdb?\n");
+    FILE *f = fopen ("./PDB/pdb1.pdb" , "r"); 
+    pdb1 = read_state_map(f);
     fclose (f);
-
-    FILE *f2 = fopen ("./PDB/pdb2.txt" , "r"); 
-    state_map_t *pdb2 = read_state_map(f2);
+    printf("After pdb?\n");
+    FILE *f2 = fopen ("./PDB/pdb2.pdb" , "r"); 
+    pdb2 = read_state_map(f2);
     fclose (f2);
 
-    FILE *f3 = fopen ("./PDB/pdb3.txt" , "r"); 
-    state_map_t *pdb3 = read_state_map(f3);
+    FILE *f3 = fopen ("./PDB/pdb3.pdb" , "r"); 
+    pdb3 = read_state_map(f3);
     fclose (f3);
-
 
     ifstream file (argv[1]);
     std::string path = argv[1];
@@ -171,11 +167,13 @@ int pdb(state_t state){
 	abstract_state(abs2,&state,&abstrac2);
 	abstract_state(abs3,&state,&abstrac3);
 
-	// Calculo del costo de cada pdb
-	int value1 = *state_map_get(pdb1,&abstrac1); 
-	int value2 = *state_map_get(pdb2,&abstrac2);  
-	int value3 = *state_map_get(pdb3,&abstrac3);  
+    // Calculo del costo de cada pdb
+    printf("1\n");
+	const int *value1 = state_map_get(pdb1,&abstrac1); 
+    printf("2\n");
+    const int *value2 = state_map_get(pdb2,&abstrac2);
+	const int *value3 = state_map_get(pdb3,&abstrac3);  
 
-	return value1+value2+value3;
+	return *value1+*value2+*value3;
 }
 
