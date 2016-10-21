@@ -45,11 +45,11 @@ ulimit(UL_SETFSIZE,2000000);
 	pdb1 = read_state_map(f);
 	fclose (f);
 	
-	f = fopen ("Act4/PDB/pdb2.txt" , "r"); 
+	f = fopen ("Act4/pdb2.txt" , "r"); 
 	pdb2 = read_state_map(f);
 	fclose (f);
 	
-	f = fopen ("Act4/PDB/pdb3.txt" , "r"); 
+	f = fopen ("Act4/pdb3.txt" , "r"); 
 	pdb3 = read_state_map(f);
 	fclose (f);
     
@@ -82,17 +82,17 @@ ulimit(UL_SETFSIZE,2000000);
 			double gen_per_sec = double(nodes_generated)/elapsed_secs;
 			
 			if (!limit){
-				outfile << "x, ida, manhattan, ";
+				outfile << "x, ida, pdb555, ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << aux << ", ";
-				outfile << manhatan(root) << ", ";
+				outfile << pdb(root) << ", ";
 				outfile << nodes_generated << ", ";
 				outfile << elapsed_secs << ", ";
 				outfile << gen_per_sec << endl;
 			}
 			else {
-				outfile << "x, ida, manhattan, ";
+				outfile << "x, ida, pdb555, ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << "na, na, na, na, na "<< endl;
