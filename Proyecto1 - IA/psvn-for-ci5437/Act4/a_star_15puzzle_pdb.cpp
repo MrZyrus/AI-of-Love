@@ -95,11 +95,9 @@ int main(int argc, char* argv[]) {
     abs2 = read_abstraction_from_file("./PDB/pdb2.abst");
     abs3 = read_abstraction_from_file("./PDB/pdb3.abst");
 
-    printf("Before pdb?\n");
     FILE *f = fopen ("./PDB/pdb1.pdb" , "r"); 
     pdb1 = read_state_map(f);
     fclose (f);
-    printf("After pdb?\n");
     FILE *f2 = fopen ("./PDB/pdb2.pdb" , "r"); 
     pdb2 = read_state_map(f2);
     fclose (f2);
@@ -168,10 +166,8 @@ int pdb(state_t state){
 	abstract_state(abs3,&state,&abstrac3);
 
     // Calculo del costo de cada pdb
-    printf("1\n");
 	const int *value1 = state_map_get(pdb1,&abstrac1); 
-    printf("2\n");
-    const int *value2 = state_map_get(pdb2,&abstrac2);
+	const int *value2 = state_map_get(pdb2,&abstrac2);
 	const int *value3 = state_map_get(pdb3,&abstrac3);  
 
 	return *value1+*value2+*value3;
