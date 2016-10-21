@@ -38,6 +38,10 @@ psvn2c_abstraction.c:
 	$(CXX) $(OPT) ./ida_pancake28.cpp -include $< -o $@
 	rm -f $*.c
 
+%.a_star_15puzzle_manhattan: %.c ./a_star_15puzzle_manhattan.cpp
+	$(CXX) $(OPT) ./a_star_15puzzle_manhattan.cpp -include $< -o $@
+	rm -f $*.c
+
 abstractor:
 	$(CXX) $(OPT) ../src/abstractor.cpp ../src/psvn.cpp -o $@
 
