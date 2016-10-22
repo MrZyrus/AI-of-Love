@@ -103,8 +103,7 @@ diferentes instancias con el algoritmo wida*, usando 2gb de memoria y
 	Los archivos .txt con las instancias para realizar las corridas
 
 Luego de realizar esta actividad, pudimos observar que wida* es el 
-algoritmo más eficiente comparado con los anteriores, ya que utiliza 
-poca memoria y resuelve cada instancia muy rápidamente. 
+algoritmo más eficiente comparado con los anteriores, especificamente IDA*, para los casos del 15puzzle y pancake, la razon es basicamente que que en ambos algoritmos la funcion heuristica es una mejor prediccion sobre como hayar el camino mas rapido hacia el goal, esta prioridad sobre la heuristica la ofrece WIDA* pero no IDA*, de este modo, es posible encontrar una solucion mas rapida usando WIDA* aunque esta recorre menos nodos que IDA*, y la solucion bno siempre es la mas optima, pero dependiendo de las caracteristicas de la busqueda, podria serlo en algunas ocasiones, pero no en las busquedas de 15puzzle y pancake.  
 
 De las heuristicas pudimos observar que la heuristica de manhattan
 fue mejor que la de pdb. 
