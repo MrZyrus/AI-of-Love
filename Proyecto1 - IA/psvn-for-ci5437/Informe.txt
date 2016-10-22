@@ -85,8 +85,10 @@ que cada vez crece más y puede ocupar incluso más de 2gb de memoria.
 
 Por su parte, el algoritmo ida* fue mucho más rápido y utiliza mucha menos
 memoria que el algoritmo de a*, esto se debe a que ida* no realiza entradas
-a memoria. Sin embargo, ambos algoritmos fueron mejor que el algoritmo de 
-busqueda ciega DFID.   
+a memoria, por otro lado el algoritmo IDA* utiliza mas tiempo que A*, por lo 
+tanto al momento de resolver un algoritmo se debe decidir sobre que es mas 
+importante, si la memoria o el tiempo. Sin embargo, ambos algoritmos fueron
+mejor que el algoritmo de busqueda ciega DFID.   
 
 De las heuristicas pudimos observar que para a*, la heuristica de pdb
 fue mejor que la de manhattan. 
@@ -103,7 +105,14 @@ diferentes instancias con el algoritmo wida*, usando 2gb de memoria y
 	Los archivos .txt con las instancias para realizar las corridas
 
 Luego de realizar esta actividad, pudimos observar que wida* es el 
-algoritmo más eficiente comparado con los anteriores, especificamente IDA*, para los casos del 15puzzle y pancake, la razon es basicamente que que en ambos algoritmos la funcion heuristica es una mejor prediccion sobre como hayar el camino mas rapido hacia el goal, esta prioridad sobre la heuristica la ofrece WIDA* pero no IDA*, de este modo, es posible encontrar una solucion mas rapida usando WIDA* aunque esta recorre menos nodos que IDA*, y la solucion bno siempre es la mas optima, pero dependiendo de las caracteristicas de la busqueda, podria serlo en algunas ocasiones, pero no en las busquedas de 15puzzle y pancake.  
+algoritmo más eficiente comparado con los anteriores, especificamente IDA*,
+para los casos del 15puzzle y pancake, la razon es basicamente que que en ambos 
+algoritmos la funcion heuristica es una mejor prediccion sobre como hayar el 
+camino mas rapido hacia el goal, esta prioridad sobre la heuristica la ofrece WIDA*
+pero no IDA*, de este modo, es posible encontrar una solucion mas rapida usando WIDA*
+aunque esta recorre menos nodos que IDA*, y la solucion bno siempre es la mas optima, 
+pero dependiendo de las caracteristicas de la busqueda, podria serlo en algunas
+ocasiones, pero no en las busquedas de 15puzzle y pancake.  
 
 De las heuristicas pudimos observar que la heuristica de manhattan
 fue mejor que la de pdb. 
