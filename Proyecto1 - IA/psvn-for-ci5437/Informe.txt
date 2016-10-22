@@ -1,0 +1,110 @@
+Este archivo contiene el informe del proyecto de busqueda heuristica
+realizado para la asignatura ci5437-Inteligencia Artificial I, por 
+los estudiantes:
+
+	- José Antonio Cipagauta (05-38040)
+	- Ricardo Lira (08-10616)
+	- Daniela Ortiz (10-10517)
+
+--------------------- Informe Proyecto1 -------------------------------
+
+En la carpeta Act1, se encuentran todos los archivos relacionados con 
+la Actividad 1, estos son:
+
+	Los .psvn de los problemas: Pancake24, Pancake28, 11Puzzle,
+	TopSpin22-4, TopSpin26-4, Hanoi14-4 y Hanoi16-4
+
+	Las tablas en .txt con la cantidad de nodos hasta la profundidad 
+especificada.
+
+Se puede notar que al aumentar la longitud de la historia se disminuye
+significativamente la cantidad de nodos generados, lo cual hace que sea
+más rápido explorar estos árboles de búsqueda. Sin embargo, no siempre
+se observa una mejoría al aumentar la longitud de la historia, como es
+el caso del problema 11Puzle. Asimismo, otros problemas como Hanoi16-4
+y Hanoi14-4 presentan las mismas tablas, ya que fueron explorados solo
+hasta profundidad 12.
+
+
+En la carpeta Act2, se encuentran todos los archivos relacionados con 
+la Actividad 2, estos son:
+
+	Los archivos .txt con las mismas tablas de la Actividad 1, pero
+con los factores de ramificación de cada profundidad.
+
+El unico problema que supera la cantidad de estados totales en el 
+modelos fue 11Puzzle a la profundidad 19 sin poda de nodos. 
+
+En la carpeta Act3, se encuentran todos los archivos relacionados con 
+la Actividad 3, estos son:
+	
+	Los .psvn de los problemas: Pancake16, 11Puzzle,
+	TopSpin16-4 y Hanoi14-4 
+	
+	Los archivos .csv donde se encuentran los resultados de explorar 
+diferentes instancias con el algoritmo de búsqueda ciega DFID, usando
+complejidad de memoria lineal y 10minutos de corrida. 
+
+	Los archivos .txt con las instancias para realizar las corridas
+
+De esta actividad, pudimos notar que el algoritmo DFID no consume mucha
+memoria pero el tiempo de corrida es bastante extenso, debido a que no
+posee ninguna heuristica para explorar el siguiente nodo, en su lugar
+realiza una busqueda iterativa.
+
+
+En la carpeta Act4, se encuentran todos los archivos relacionados con 
+la Actividad 4, estos son:
+
+	Distintos archivos con el código utilizado para la implementación 
+de los algoritmos a* e ida* utilizando las heurísticas gap, manhattan 
+y pdb.
+
+	Los .psvn de los problemas: Pancake28 y 11Puzzle
+	
+	Los archivos .csv donde se encuentran los resultados de explorar 
+diferentes instancias con cada algoritmo, usando 2gb de memoria y 
+5 minutos de corrida. 
+
+	Los archivos .txt con las instancias para realizar las corridas
+
+
+NOTA: En esta carpeta no fueron incluidos los archivos .pdb debido a 
+su peso. Sin embargo, para probar el proyecto, los mismos deben ser 
+creados mediante el comando:
+
+	make 15-puzzle/pdbX.pdb, donde X debe ser sustituido por 1,2 y 3.
+
+Luego, los archivos .abst y .pdb deben ser colocados en la carpeta PDB.
+
+Con esta actividad, pudimos observar que el algoritmo a* consume 
+muchísima memoria y que en ocasiones, dependiendo de la instancia,
+puede hacer que a la computadora se le agota la memoria. Cuando a* intenta 
+resolver una instancia, guarda todos los nodos en una cola de prioridades
+que cada vez crece más y puede ocupar incluso más de 2gb de memoria.
+
+Por su parte, el algoritmo ida* fue mucho más rápido y utiliza mucha menos
+memoria que el algoritmo de a*, esto se debe a que ida* no realiza entradas
+a memoria. Sin embargo, ambos algoritmos fueron mejor que el algoritmo de 
+busqueda ciega DFID.   
+
+De las heuristicas pudimos observar que para a*, la heuristica de pdb
+fue mejor que la de manhattan. 
+
+En la carpeta Act5, se encuentran todos los archivos relacionados con 
+la Actividad 5, estos son:
+
+	Los .psvn de los problemas: Pancake28 y 11Puzzle
+	
+	Los archivos .csv donde se encuentran los resultados de explorar 
+diferentes instancias con el algoritmo wida*, usando 2gb de memoria y 
+5 minutos de corrida.
+
+	Los archivos .txt con las instancias para realizar las corridas
+
+Luego de realizar esta actividad, pudimos observar que wida* es el 
+algoritmo más eficiente comparado con los anteriores, ya que utiliza 
+poca memoria y resuelve cada instancia muy rápidamente. 
+
+De las heuristicas pudimos observar que la heuristica de manhattan
+fue mejor que la de pdb. 
