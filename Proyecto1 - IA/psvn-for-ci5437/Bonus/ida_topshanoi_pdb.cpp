@@ -16,10 +16,8 @@ time_t begint,endt;
 int idaVisit(state_t,int,int,int);
 int pdb(state_t);
 
-state_map_t *pdb1;
-state_map_t *pdb2;       
+state_map_t *pdb1;       
 abstraction_t *abs1;
-abstraction_t *abs2;
 
 int main(int argc, char* argv[]) {
 
@@ -33,15 +31,11 @@ ulimit(UL_SETFSIZE,2000000);
 	char stateArray[256];
 	clock_t begin,end;
 
-	abs1 = read_abstraction_from_file("./PDB/pdb1.abst");
-    abs2 = read_abstraction_from_file("./PDB/pdb2.abst");
+	abs1 = read_abstraction_from_file("./PDB/pdbhanoi.abst");
 
-    FILE *f = fopen ("./PDB/pdb1.pdb" , "r"); 
+    FILE *f = fopen ("./PDB/pdbhanoi.pdb" , "r"); 
     pdb1 = read_state_map(f);
     fclose (f);
-    FILE *f2 = fopen ("./PDB/pdb2.pdb" , "r"); 
-    pdb2 = read_state_map(f2);
-    fclose (f2);
     
 	ifstream file (argv[1]);
 	std::string path = argv[1];
@@ -72,7 +66,7 @@ ulimit(UL_SETFSIZE,2000000);
 			double gen_per_sec = double(nodes_generated)/elapsed_secs;
 			
 			if (!limit){
-				outfile << "x, ida, pdb555, ";
+				outfile << "x, ida, pdb, ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << aux << ", ";
@@ -82,7 +76,7 @@ ulimit(UL_SETFSIZE,2000000);
 				outfile << gen_per_sec << endl;
 			}
 			else {
-				outfile << "x, ida, pdb555, ";
+				outfile << "x, ida, pdb, ";
 				outfile << path.substr(path.find_last_of("\\/")+1,path.find_last_of(".")) << ", ";
 				outfile << "'" << stateArray << "', ";
 				outfile << "na, na, na, na, na "<< endl;
@@ -103,21 +97,11 @@ ulimit(UL_SETFSIZE,2000000);
 int pdb(state_t state){
 
 	state_t abstrac1;
-	state_t abstrac2;
 	abstract_state(abs1,&state,&abstrac1);
-	abstract_state(abs2,&state,&abstrac2);
-
-    // Calculo del costo de cada pdb
+	
 	const int *value1 = state_map_get(pdb1,&abstrac1); 
-	const int *value2 = state_map_get(pdb2,&abstrac2);
-	
-	if (*value1 > *value2){
-		return *value1;
-	}
-	else {
-		return *value2;
-	}
-	
+
+	return *value1;
 }
 
 /* Funcion de recorrido usando el algoritmo IDA* con una profundidad de "maxBound"
