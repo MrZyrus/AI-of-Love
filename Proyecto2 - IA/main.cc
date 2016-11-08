@@ -102,7 +102,7 @@ int main(int argc, const char **argv) {
             if( algorithm == 0 ) {
                 //value = color * (color == 1 ? maxmin(pv[i], 0, use_tt) : minmax(pv[i], 0, use_tt));
             } else if( algorithm == 1 ) {
-                //value = negamax(pv[i], 0, color, use_tt);
+                value = negamax(pv[i], 0, color, use_tt);
             } else if( algorithm == 2 ) {
                 //value = negamax(pv[i], 0, -200, 200, color, use_tt);
             } else if( algorithm == 3 ) {
@@ -130,3 +130,23 @@ int main(int argc, const char **argv) {
     return 0;
 }
 
+int negamax(state_t state, int depth, int color, bool use_tt){
+    
+    if (depth == 0 || state.terminal()) return color*state.value();
+    int alpha = INT_MIN;
+    state_t child;
+    bool bow = false; // black(false) or white(true)
+    bow = color > 0;
+
+    // Iterate over all valid moves
+    for (int i = 0; i < DIM; ++i){
+        // Generate childs and expand
+        if (state.outflank(bow,i)){
+            child = state.move(bow,i);
+            generated++;
+            alpha = max(alpha,-negamax(child,depth-1,-color,use_tt));
+            expanded++;
+        }
+    }
+    return alpha;
+}
