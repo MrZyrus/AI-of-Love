@@ -5,7 +5,7 @@
 // Modified by: 
 
 #include <iostream>
-#include <limits>
+#include <climits>
 #include "othello_cut.h" // won't work correctly until .h is fixed!
 #include "utils.h"
 
@@ -192,7 +192,8 @@ int negamax(state_t state, int depth, int color, bool use_tt){
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     
     if (depth == 0 || state.terminal()) return color*state.value();
-    int score,val = INT_MIN;
+    int score = INT_MIN;
+    int val = INT_MIN;
     state_t child;
     bool bow = false; // black(false) or white(true)
     bow = color > 0;
@@ -203,7 +204,7 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
         if (state.outflank(bow,i)){
             child = state.move(bow,i);
             generated++;
-            val = -negamax(child,depth-1,-beta,-alpha,-color,use_tt));
+            val = -negamax(child,depth-1,-beta,-alpha,-color,use_tt);
             score = max(score,val);
             alpha = max(alpha,val);
             expanded++;
