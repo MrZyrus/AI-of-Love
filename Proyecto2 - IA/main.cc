@@ -130,6 +130,44 @@ int main(int argc, const char **argv) {
     return 0;
 }
 
+int minmax(state_t state, int depth, bool use_tt){
+
+    if (depth == 0 || state.terminal()) return state.value();
+    int score = INT_MAX;
+    state_t child;
+
+    // Iterate over all valid moves
+    for (int i = 0; i < DIM; ++i){
+        // Generate childs and expand
+        if (state.is_white_move(i)){
+            child = state.white_move(i);
+            generated++;
+            score = min(score,maxmin(child,depth-1,use_tt));
+            expanded++;
+        }
+    }
+    return score;
+}
+
+int maxmin(state_t state, int depth, bool use_tt){
+
+    if (depth == 0 || state.terminal()) return state.value();
+    int score = INT_MIN;
+    state_t child;
+
+    // Iterate over all valid moves
+    for (int i = 0; i < DIM; ++i){
+        // Generate childs and expand
+        if (state.is_black_move(i)){
+            child = state.black_move(i);
+            generated++;
+            score = max(score,minmax(child,depth-1,use_tt));
+            expanded++;
+        }
+    }
+    return score;
+}
+
 int negamax(state_t state, int depth, int color, bool use_tt){
     
     if (depth == 0 || state.terminal()) return color*state.value();
@@ -149,4 +187,28 @@ int negamax(state_t state, int depth, int color, bool use_tt){
         }
     }
     return alpha;
+}
+
+int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
+    
+    if (depth == 0 || state.terminal()) return color*state.value();
+    int score,val = INT_MIN;
+    state_t child;
+    bool bow = false; // black(false) or white(true)
+    bow = color > 0;
+
+    // Iterate over all valid moves
+    for (int i = 0; i < DIM; ++i){
+        // Generate childs and expand
+        if (state.outflank(bow,i)){
+            child = state.move(bow,i);
+            generated++;
+            val = -negamax(child,depth-1,-beta,-alpha,-color,use_tt));
+            score = max(score,val);
+            alpha = max(alpha,val);
+            expanded++;
+            if (alpha >= beta) break;
+        }
+    }
+    return score;
 }
