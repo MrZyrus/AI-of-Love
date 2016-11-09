@@ -198,7 +198,29 @@ inline bool state_t::outflank(bool color, int pos) const {
         if( (p < x - 1) && (p >= cols[pos - 4]) && !is_free(*p) ) return true;
     }
 
-    // [CHECK OVER DIAGONALS REMOVED]
+    // Check diagonals
+
+    x = dia1[pos - 4];
+    while( *x != pos ) ++x;
+    if( *(x+1) != -1 ) {
+        for( p = x + 1; (*p != -1) && !is_free(*p) && (color ^ is_black(*p)); ++p );
+        if( (p > x + 1) && (*p != -1) && !is_free(*p) ) return true;
+    }
+    if( x != dia1[pos - 4] ) {
+        for( p = x - 1; (p >= dia1[pos - 4]) && !is_free(*p) && (color ^ is_black(*p)); --p );
+        if( (p < x - 1) && (p >= dia1[pos - 4]) && !is_free(*p) ) return true;
+    }
+
+    x = dia2[pos - 4];
+    while( *x != pos ) ++x;
+    if( *(x+1) != -1 ) {
+        for( p = x + 1; (*p != -1) && !is_free(*p) && (color ^ is_black(*p)); ++p );
+        if( (p > x + 1) && (*p != -1) && !is_free(*p) ) return true;
+    }
+    if( x != dia2[pos - 4] ) {
+        for( p = x - 1; (p >= dia2[pos - 4]) && !is_free(*p) && (color ^ is_black(*p)); --p );
+        if( (p < x - 1) && (p >= dia2[pos - 4]) && !is_free(*p) ) return true;
+    }
 
     return false;
 }
@@ -262,7 +284,37 @@ inline state_t state_t::move(bool color, int pos) const {
         }
     }
 
-    // [PROCESS OF DIAGONALS REMOVED]
+    // Process diagonals
+
+    x = dia1[pos - 4];
+    while( *x != pos ) ++x;
+    if( *(x+1) != -1 ) {
+        for( p = x + 1; (*p != -1) && !is_free(*p) && (color ^ is_black(*p)); ++p );
+        if( (p > x + 1) && (*p != -1) && !is_free(*p) ) {
+            for( const int *q = x + 1; q < p; ++q ) s.set_color(color, *q);
+        }
+    }
+    if( x != dia1[pos - 4] ) {
+        for( p = x - 1; (p >= dia1[pos - 4]) && !is_free(*p) && (color ^ is_black(*p)); --p );
+        if( (p < x - 1) && (p >= dia1[pos - 4]) && !is_free(*p) ) {
+            for( const int *q = x - 1; q > p; --q ) s.set_color(color, *q);
+        }
+    }
+
+    x = dia2[pos - 4];
+    while( *x != pos ) ++x;
+    if( *(x+1) != -1 ) {
+        for( p = x + 1; (*p != -1) && !is_free(*p) && (color ^ is_black(*p)); ++p );
+        if( (p > x + 1) && (*p != -1) && !is_free(*p) ) {
+            for( const int *q = x + 1; q < p; ++q ) s.set_color(color, *q);
+        }
+    }
+    if( x != dia2[pos - 4] ) {
+        for( p = x - 1; (p >= dia2[pos - 4]) && !is_free(*p) && (color ^ is_black(*p)); --p );
+        if( (p < x - 1) && (p >= dia2[pos - 4]) && !is_free(*p) ) {
+            for( const int *q = x - 1; q > p; --q ) s.set_color(color, *q);
+        }
+    }
 
     return s;
 }
@@ -305,4 +357,3 @@ inline std::ostream& operator<<(std::ostream &os, const state_t &state) {
     state.print(os);
     return os;
 }
-
