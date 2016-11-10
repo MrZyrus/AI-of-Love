@@ -8,6 +8,7 @@
 #include <climits>
 #include "othello_cut.h" // won't work correctly until .h is fixed!
 #include "utils.h"
+#include <sys/time.h>
 
 #include <unordered_map>
 
@@ -15,7 +16,9 @@ using namespace std;
 
 unsigned expanded = 0;
 unsigned generated = 0;
+double secs;
 int tt_threshold = 32; // threshold to save entries in TT
+time_t begint,endt;
 
 // Transposition table
 struct stored_info_t {
@@ -88,6 +91,7 @@ int main(int argc, const char **argv) {
 
     // Run algorithm along PV (bacwards)
     cout << "Moving along PV:" << endl;
+    begint = time(NULL);
     for( int i = 0; i <= npv; ++i ) {
         //cout << pv[i];
         int value = 0;
@@ -100,9 +104,9 @@ int main(int argc, const char **argv) {
 
         try {
             if( algorithm == 0 ) {
-                value = color * (color == 1 ? maxmin(pv[i], 0, use_tt) : minmax(pv[i], 0, use_tt));
+                value = color * (color == 1 ? maxmin(pv[i], 100, use_tt) : minmax(pv[i], 100, use_tt));
             } else if( algorithm == 1 ) {
-                value = negamax(pv[i], 0, color, use_tt);
+                value = negamax(pv[i], 100, color, use_tt);
             } else if( algorithm == 2 ) {
                 value = negamax(pv[i], 0, -200, 200, color, use_tt);
             } else if( algorithm == 3 ) {
@@ -116,6 +120,10 @@ int main(int argc, const char **argv) {
             use_tt = false;
         }
 
+ 	if(value == -40){
+		cout << "Time limit reached : 10 minutes" << endl;
+		return 0;
+	}
         float elapsed_time = Utils::read_time_in_seconds() - start_time;
 
         cout << npv + 1 - i << ". " << (color == 1 ? "Black" : "White") << " moves: "
@@ -125,14 +133,19 @@ int main(int argc, const char **argv) {
              << ", seconds=" << elapsed_time
              << ", #generated/second=" << generated/elapsed_time
              << endl;
+	
+		
     }
 
     return 0;
 }
 
 int minmax(state_t state, int depth, bool use_tt){
-
+    endt = time(NULL);
+    secs = difftime(endt,begint);
+    if (secs > 600)	return -40;
     if (depth == 0 || state.terminal()) return state.value();
+    expanded++;
     int score = INT_MAX;
     state_t child;
 
@@ -143,15 +156,20 @@ int minmax(state_t state, int depth, bool use_tt){
             child = state.white_move(i);
             generated++;
             score = min(score,maxmin(child,depth-1,use_tt));
-            expanded++;
+	    if(score == -40) return -40;           
         }
     }
+    if (score == INT_MAX)
+	return maxmin(state,depth-1,use_tt);
     return score;
 }
 
 int maxmin(state_t state, int depth, bool use_tt){
-
+    endt = time(NULL);
+    secs = difftime(endt,begint);
+    if (secs > 600)	return -40;
     if (depth == 0 || state.terminal()) return state.value();
+    expanded++;
     int score = INT_MIN;
     state_t child;
 
@@ -162,15 +180,21 @@ int maxmin(state_t state, int depth, bool use_tt){
             child = state.black_move(i);
             generated++;
             score = max(score,minmax(child,depth-1,use_tt));
-            expanded++;
+	    if(score == -40) return -40; 
+            
         }
     }
+    if (score == INT_MIN)
+	return minmax(state,depth-1,use_tt);
     return score;
 }
 
 int negamax(state_t state, int depth, int color, bool use_tt){
-    
+    endt = time(NULL);
+    secs = difftime(endt,begint);
+    if (secs > 600)	return -40;
     if (depth == 0 || state.terminal()) return color*state.value();
+    expanded++;
     int alpha = INT_MIN;
     state_t child;
     bool bow = false; // black(false) or white(true)
@@ -183,9 +207,11 @@ int negamax(state_t state, int depth, int color, bool use_tt){
             child = state.move(bow,i);
             generated++;
             alpha = max(alpha,-negamax(child,depth-1,-color,use_tt));
-            expanded++;
+            
         }
     }
+    if (alpha == INT_MIN)
+	return max(alpha,-negamax(state,depth-1,-color,use_tt));
     return alpha;
 }
 
