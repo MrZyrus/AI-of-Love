@@ -213,8 +213,8 @@ int negamax(state_t state, int depth, int color, bool use_tt){
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    assert(secs <= 600);
-    if (depth == 0 || state.terminal()) return color*state.value();
+    if (secs > 600) return -40;
+    if (/*depth == 0 ||*/ state.terminal()) return color*state.value();
     expanded++;
     int score = INT_MIN;
     int val;
@@ -244,10 +244,10 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
 int scout(state_t state, int depth, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    assert(secs <= 600);
-    if (depth == 0 || state.terminal()) return state.value();
+    if (secs > 600) return -40;
+    if (/*depth == 0 ||*/ state.terminal()) return state.value();
     expanded++;
-    int score = 0; 
+    int score = INT_MIN; 
     bool is_first_child = true;
     state_t child;
     bool bow = false; // black(false) or white(true)
@@ -275,12 +275,12 @@ int scout(state_t state, int depth, int color, bool use_tt){
             
         }
     }
-    if (score == 0) return scout(child,depth-1,-color,use_tt);    
+    if (score == INT_MIN) return scout(state,depth-1,-color,use_tt);    
     return score;
 }
 
 bool TEST(state_t state, int depth, int score, int condition, int color2){
-    if (depth == 0 || state.terminal()) return state.value() > score ? true : false;
+    if (/*depth == 0 ||*/ state.terminal()) return state.value() > score ? true : false;
     state_t child;
     bool bow = false; // black(false) or white(true)
     bow = color2 > 0;
@@ -293,6 +293,7 @@ bool TEST(state_t state, int depth, int score, int condition, int color2){
             else if ( (color2 == -1) && !TEST(child, depth-1,score,condition,-color2) ) return false;
         }
     }
+    if (score == INT_MIN) return TEST(state,depth-1,score,condition,-color2);
     return (color2 == 1) ? false : true;
 
 }
@@ -300,10 +301,10 @@ bool TEST(state_t state, int depth, int score, int condition, int color2){
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    assert(secs <= 600);
-    if (depth == 0 || state.terminal()) return color*state.value();
+    if (secs > 600) return -40;
+    if (/*depth == 0 ||*/ state.terminal()) return color*state.value();
     expanded++;
-    int score = 0; // I'm not sure
+    int score = INT_MIN; 
     bool is_first_child = true;
     state_t child;
     bool bow = false; // black(false) or white(true)
@@ -330,9 +331,8 @@ int negascout(state_t state, int depth, int alpha, int beta, int color, bool use
             
         }
     }
-    if (score == 0){
-        score = -negascout(state, depth-1, -beta, -score, -color, use_tt);
-        alpha = max(alpha,score);
+    if (score == INT_MIN){
+        alpha = -negascout(state, depth-1, -beta, -alpha, -color, use_tt);
     }
     return alpha;
 }
