@@ -44,7 +44,7 @@ int minmax(state_t state, int depth, bool use_tt = false);
 int maxmin(state_t state, int depth, bool use_tt = false);
 int negamax(state_t state, int depth, int color, bool use_tt = false);
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
-bool TEST(state_t state, int depth, int score, int condition, int color2);
+bool TEST(state_t state, int depth, int score, int condition, int color);
 int scout(state_t state, int depth, int color, bool use_tt = false);
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
 
@@ -245,7 +245,7 @@ int scout(state_t state, int depth, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
     if (secs > 600) return -40;
-    if (/*depth == 0 ||*/ state.terminal()) return state.value();
+    if (state.terminal()) return state.value();
     expanded++;
     int score = INT_MIN; 
     bool is_first_child = true;
@@ -260,15 +260,15 @@ int scout(state_t state, int depth, int color, bool use_tt){
             child = state.move(bow,i);
             generated++;
             if (is_first_child){
-                is_first_child = false;
                 score = scout(child,depth-1,-color,use_tt);
+                is_first_child = false;
             }
             else{
-                if ( color == 1 && TEST(child, depth-1,score,0,-color)){
-                score = scout(child,depth-1,-color,use_tt);    
+                if (color == 1 && TEST(child,score,depth-1,-color,0)){
+                    score = scout(child,depth-1,-color,use_tt);   
                 }
-                else if ( color == -1 && !TEST(child, depth-1,score,1,-color)){
-                score = scout(child,depth-1,-color,use_tt);    
+                if (color == -1 && !TEST(child,score,depth-1,-color,1)){
+                    score = scout(child,depth-1,-color,use_tt); 
                 }
 
             }
@@ -279,22 +279,26 @@ int scout(state_t state, int depth, int color, bool use_tt){
     return score;
 }
 
-bool TEST(state_t state, int depth, int score, int condition, int color2){
-    if (/*depth == 0 ||*/ state.terminal()) return state.value() > score ? true : false;
+bool TEST(state_t state, int score, int depth, int color, int condition){
+    if (state.terminal()) return (condition == 1) ? state.value() >= score : state.value() > score;
     state_t child;
     bool bow = false; // black(false) or white(true)
-    bow = color2 > 0;
+    bow = color > 0;
+    bool pass = true;
+    //expanded++;
     // Iterate over all valid moves
     for (int i = 0; i < DIM; ++i){
         // Generate childs 
         if (state.outflank(bow,i)){
             child = state.move(bow,i);
-            if ( (color2 == 1) && TEST(child, depth-1,score,condition,-color2) ) return true;
-            else if ( (color2 == -1) && !TEST(child, depth-1,score,condition,-color2) ) return false;
+            pass = false;
+            //generated++;
+            if (color == 1 && TEST(child,score,depth-1,-color,condition) ) return true;
+            else if (color == -1 && !TEST(child,score,depth-1,-color,condition) ) return false;
         }
     }
-    if (score == INT_MIN) return TEST(state,depth-1,score,condition,-color2);
-    return (color2 == 1) ? false : true;
+    if (pass) return TEST(state,score,depth-1,-color,condition);
+    return (color == 1) ? false : true;
 
 }
 
@@ -302,7 +306,7 @@ int negascout(state_t state, int depth, int alpha, int beta, int color, bool use
     endt = time(NULL);
     secs = difftime(endt,begint);
     if (secs > 600) return -40;
-    if (/*depth == 0 ||*/ state.terminal()) return color*state.value();
+    if (state.terminal()) return color*state.value();
     expanded++;
     int score = INT_MIN; 
     bool is_first_child = true;
