@@ -9,7 +9,7 @@
 #include "othello_cut.h" // won't work correctly until .h is fixed!
 #include "utils.h"
 #include <sys/time.h>
-
+#include <cassert>
 #include <unordered_map>
 
 using namespace std;
@@ -121,10 +121,6 @@ int main(int argc, const char **argv) {
             use_tt = false;
         }
 
- 	if(value == -40){
-		cout << "Time limit reached : 10 minutes" << endl;
-		return 0;
-	}
         float elapsed_time = Utils::read_time_in_seconds() - start_time;
 
         cout << npv + 1 - i << ". " << (color == 1 ? "Black" : "White") << " moves: "
@@ -144,7 +140,7 @@ int main(int argc, const char **argv) {
 int minmax(state_t state, int depth, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600)	return -40;
+    assert(secs <= 600);
     if (depth == 0 || state.terminal()) return state.value();
     expanded++;
     int score = INT_MAX;
@@ -152,22 +148,22 @@ int minmax(state_t state, int depth, bool use_tt){
 
     // Iterate over all valid moves
     for (int i = 0; i < DIM; ++i){
-        // Generate childs 
+        // Generate childs and expand
         if (state.is_white_move(i)){
             child = state.white_move(i);
             generated++;
-            score = min(score,maxmin(child,depth-1,use_tt));
-	    if(score == -40) return -40;           
+            score = min(score,maxmin(child,depth-1,use_tt));         
         }
     }
-    if (score == INT_MAX) return maxmin(state,depth-1,use_tt);
+    if (score == INT_MAX)
+	return maxmin(state,depth-1,use_tt);
     return score;
 }
 
 int maxmin(state_t state, int depth, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600)	return -40;
+    assert(secs <= 600);
     if (depth == 0 || state.terminal()) return state.value();
     expanded++;
     int score = INT_MIN;
@@ -175,23 +171,23 @@ int maxmin(state_t state, int depth, bool use_tt){
 
     // Iterate over all valid moves
     for (int i = 0; i < DIM; ++i){
-        // Generate childs 
+        // Generate childs and expand
         if (state.is_black_move(i)){
             child = state.black_move(i);
             generated++;
-            score = max(score,minmax(child,depth-1,use_tt));
-	    if(score == -40) return -40; 
+            score = max(score,minmax(child,depth-1,use_tt)); 
             
         }
     }
-    if (score == INT_MIN) return minmax(state,depth-1,use_tt);
+    if (score == INT_MIN)
+	return minmax(state,depth-1,use_tt);
     return score;
 }
 
 int negamax(state_t state, int depth, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600)	return -40;
+    assert(secs <= 600);
     if (depth == 0 || state.terminal()) return color*state.value();
     expanded++;
     int alpha = INT_MIN;
@@ -201,22 +197,23 @@ int negamax(state_t state, int depth, int color, bool use_tt){
 
     // Iterate over all valid moves
     for (int i = 0; i < DIM; ++i){
-        // Generate childs 
+        // Generate childs and expand
         if (state.outflank(bow,i)){
             child = state.move(bow,i);
             generated++;
-            alpha = max(alpha,-negamax(child,depth-1,-color,use_tt));
-          
+            alpha = max(alpha,-negamax(child,depth-1,-color,use_tt));      
         }
     }
-    if (alpha == INT_MIN) return max(alpha,-negamax(state,depth-1,-color,use_tt));
+    if (alpha == INT_MIN)
+	return max(alpha,-negamax(state,depth-1,-color,use_tt));
     return alpha;
 }
+
 
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600) return -40;
+    assert(secs <= 600);
     if (depth == 0 || state.terminal()) return color*state.value();
     expanded++;
     int score = INT_MIN;
@@ -247,7 +244,7 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
 int scout(state_t state, int depth, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600) return -40;
+    assert(secs <= 600);
     if (depth == 0 || state.terminal()) return state.value();
     expanded++;
     int score = 0; 
@@ -303,7 +300,7 @@ bool TEST(state_t state, int depth, int score, int condition, int color2){
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600) return -40;
+    assert(secs <= 600);
     if (depth == 0 || state.terminal()) return color*state.value();
     expanded++;
     int score = 0; // I'm not sure
