@@ -90,7 +90,7 @@ int main(int argc, const char **argv) {
     }
     cout << (use_tt ? " w/ transposition table" : "") << endl;
 
-    // Run algorithm along PV (bacwards)
+    // Run algorithm along PV (backwards)
     cout << "Moving along PV:" << endl;
     begint = time(NULL);
     for( int i = 0; i <= npv; ++i ) {
@@ -124,7 +124,7 @@ int main(int argc, const char **argv) {
         float elapsed_time = Utils::read_time_in_seconds() - start_time;
 
         cout << npv + 1 - i << ". " << (color == 1 ? "Black" : "White") << " moves: "
-             << "value=" << color * value
+             << "value=" << (algorithm == 3 ? value : color * value)
              << ", #expanded=" << expanded
              << ", #generated=" << generated
              << ", seconds=" << elapsed_time
@@ -213,7 +213,7 @@ int negamax(state_t state, int depth, int color, bool use_tt){
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600) return -40;
+    assert(secs <= 600);
     if (/*depth == 0 ||*/ state.terminal()) return color*state.value();
     expanded++;
     int score = INT_MIN;
@@ -244,7 +244,7 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
 int scout(state_t state, int depth, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600) return -40;
+    assert(secs <= 600);
     if (state.terminal()) return state.value();
     expanded++;
     int score = INT_MIN; 
@@ -305,7 +305,7 @@ bool TEST(state_t state, int score, int depth, int color, int condition){
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt){
     endt = time(NULL);
     secs = difftime(endt,begint);
-    if (secs > 600) return -40;
+    assert(secs <= 600);
     if (state.terminal()) return color*state.value();
     expanded++;
     int score = INT_MIN; 
