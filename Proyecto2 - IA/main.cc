@@ -3,10 +3,13 @@
 // Author: Blai Bonet
 // Last Revision: 1/11/16
 // Modified by: 
+// Jose Antonio Cipagauta
+// Ricardo Lira
+// Daniela Ortiz
 
 #include <iostream>
 #include <climits>
-#include "othello_cut.h" // won't work correctly until .h is fixed!
+#include "othello_cut.h" 
 #include "utils.h"
 #include <sys/time.h>
 #include <cassert>
