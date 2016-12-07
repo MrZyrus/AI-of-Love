@@ -62,7 +62,7 @@ int main(int argc, const char **argv) {
 		i = i+11;
 	}
 	i = 57;
-	while(i<5){
+	while(i<61){
 		outfile << "-" << i << " " << i-5 << " " << i+1 << " 0\n";
 		outfile << "-" << i << " -" << i-5 << " -" << i+1 << " 0\n";
 		outfile << "-" << i << " " << i-6 << " " << i-1 << " 0\n";
