@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 using namespace std;
 
 int main(int argc, const char **argv) {
@@ -14,17 +15,24 @@ int main(int argc, const char **argv) {
   i = 1;
   
   while (getline(infile, line)) {
-    n = line[0] - '0';
-    m = line[2] - '0';
+    istringstream iss(line);
     typeIclauses = 0;
+    string aux;
+    iss >> n;
+    iss >> m;
+
     ofstream outfile(to_string(i++) + ".txt");
-    for (int j = 4; j < line.length(); j++) {
-      if (line[j] == '0') typeIclauses = typeIclauses + 4;
-      if (line[j] == '1') typeIclauses = typeIclauses + 7;
-      if (line[j] == '2') typeIclauses = typeIclauses + 8;
-      if (line[j] == '3') typeIclauses = typeIclauses + 7;
-      if (line[j] == '4') typeIclauses = typeIclauses + 4;
+
+    while (iss >> aux) {
+      for (int j = 0; j < aux.length(); j++) {
+        if (aux[j] == '0') typeIclauses = typeIclauses + 4;
+        if (aux[j] == '1') typeIclauses = typeIclauses + 7;
+        if (aux[j] == '2') typeIclauses = typeIclauses + 8;
+        if (aux[j] == '3') typeIclauses = typeIclauses + 7;
+        if (aux[j] == '4') typeIclauses = typeIclauses + 4;
+      }
     }
+    
     outfile << "p cnf " << m * n * 4 << ' ' << ((m-1) * n + (n-1) * m) * 2 + typeIclauses;
     outfile.close();
   }
