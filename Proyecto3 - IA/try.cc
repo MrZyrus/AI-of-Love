@@ -84,6 +84,16 @@ int main(int argc, const char **argv) {
       }
       i++;
     }
+
+    outfile << "-1 " << m+1 << " 0\n";
+    outfile << '-' << m+1 << " 1 0\n";
+    outfile << '-' << m << ' ' << 2*m+1 << " 0\n";
+    outfile << '-' << 2*m+1 << ' ' << m << " 0\n";
+    outfile << '-' << m*n+1+(m+1)*n << ' ' << m*n+(m+1)*(n-1)+1 << " 0\n";
+    outfile << '-' << m*n+(m+1)*(n-1)+1 << ' ' << m*n+1+(m+1)*n << " 0\n";
+    outfile << '-' << m*(n+1)+(m+1)*n << ' ' << m*n+(m+1)*n << " 0\n";
+    outfile << '-' << m*n+(m+1)*n << ' ' << m*(n+1)+(m+1)*n << " 0\n";
+
     outfile.close();
   }
   infile.close();
