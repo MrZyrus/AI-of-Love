@@ -138,8 +138,8 @@ int main(int argc, const char **argv) {
     while(i<(m-1)*(n+1)+n*m-2*n+1){
       outfile << "-" << i << " " << i-1-2*n << " " << i-n << " 0\n";
       outfile << "-" << i << " -" << i-1-2*n << " -" << i-n << " 0\n";
-      outfile << "-" << i << " " << i+1-n << " " << i+1+2*n << " 0\n";
-      outfile << "-" << i << " -" << i+1-n << " -" << i+1+2*n << " 0\n";
+      outfile << "-" << i << " " << i+1+n << " " << i+1+2*n << " 0\n";
+      outfile << "-" << i << " -" << i+1+n << " -" << i+1+2*n << " 0\n";
       outfile << "-" << i-n << " " << i-1-2*n << " " << i << " 0\n";
       outfile << "-" << i-n << " -" << i-1-2*n << " -" << i << " 0\n";
       outfile << "-" << i-n << " " << i-2*n << " " << i+1 << " " << i-n+1 << " 0\n";
