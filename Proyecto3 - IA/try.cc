@@ -9,10 +9,10 @@
 using namespace std;
 
 int main(int argc, const char **argv) {
-  int n, m, i, typeIclauses;
+  int n, m, filename, typeIclauses, i, j;
   string line;
   ifstream infile(argv[1]);
-  i = 1;
+  filename = 1;
   
   while (getline(infile, line)) {
     istringstream iss(line);
@@ -21,19 +21,70 @@ int main(int argc, const char **argv) {
     iss >> n;
     iss >> m;
 
-    ofstream outfile(to_string(i++) + ".txt");
+    ofstream outfile(to_string(filename++) + ".txt");
 
     while (iss >> aux) {
-      for (int j = 0; j < aux.length(); j++) {
-        if (aux[j] == '0') typeIclauses = typeIclauses + 4;
-        if (aux[j] == '1') typeIclauses = typeIclauses + 7;
-        if (aux[j] == '2') typeIclauses = typeIclauses + 8;
-        if (aux[j] == '3') typeIclauses = typeIclauses + 7;
-        if (aux[j] == '4') typeIclauses = typeIclauses + 4;
+      for (int k = 0; k < aux.length(); k++) {
+        if (aux[k] == '0') typeIclauses = typeIclauses + 4;
+        if (aux[k] == '1') typeIclauses = typeIclauses + 7;
+        if (aux[k] == '2') typeIclauses = typeIclauses + 8;
+        if (aux[k] == '3') typeIclauses = typeIclauses + 7;
+        if (aux[k] == '4') typeIclauses = typeIclauses + 4;
       }
     }
     
-    outfile << "p cnf " << m * n * 4 << ' ' << ((m-1) * n + (n-1) * m) * 2 + typeIclauses;
+    outfile << "p cnf " << (n+1)*m+n*(m+1) << ' ' << typeIclauses + 24 + ((n-2)*2+(m-2)*2)*4 + ((n-1)*2+(m-1)*2)*4 + ((n-2)*(m-1)+(n-1)*(m-2))*4 << '\n';
+    istringstream ss(line);
+    ss >> aux;
+    ss >> aux;
+
+    i = 1;
+    while (ss >> aux) {
+      for (j = 1; j < m+1; j++) {
+        if (aux[j-1] == '0') {
+          outfile << -((i-1)*m+j) << " 0\n";
+          outfile << -(i*m+j) << " 0\n";
+          outfile << -(i+(n+1)*m+(j-1)*n) << " 0\n";
+          outfile << -(i+(n+1)*m+j*n) << " 0\n";
+        }
+        if (aux[j-1] == '1') {
+          outfile << (i-1)*m+j << ' ' << i*m+j << ' ' << i+(n+1)*m+(j-1)*n << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i*m+j) << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i+(n+1)*m+(j-1)*n) << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+          outfile << -(i*m+j) << ' ' << -(i+(n+1)*m+(j-1)*n) << " 0\n";
+          outfile << -(i*m+j) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+          outfile << -(i+(n+1)*m+(j-1)*n) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+        }
+        if (aux[j-1] == '2') {
+          outfile << (i-1)*m+j << ' ' << i*m+j << ' ' << i+(n+1)*m+(j-1)*n << ' ' << " 0\n";
+          outfile << (i-1)*m+j << ' ' << i*m+j << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << (i-1)*m+j << ' ' << i+(n+1)*m+(j-1)*n << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << i*m+j << ' ' << i+(n+1)*m+(j-1)*n << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i*m+j) << ' ' << -(i+(n+1)*m+(j-1)*n) << ' ' << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i*m+j) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i+(n+1)*m+(j-1)*n) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+          outfile << -(i*m+j) << ' ' << -(i+(n+1)*m+(j-1)*n) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+        }
+        if (aux[j-1] == '3') {
+          outfile << (i-1)*m+j << ' ' << i*m+j << " 0\n";
+          outfile << (i-1)*m+j << ' ' << i+(n+1)*m+(j-1)*n << " 0\n";
+          outfile << (i-1)*m+j << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << i*m+j << ' ' << i+(n+1)*m+(j-1)*n << " 0\n";
+          outfile << i*m+j << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << i+(n+1)*m+(j-1)*n << ' ' << i+(n+1)*m+j*n << " 0\n";
+          outfile << -((i-1)*m+j) << ' ' << -(i*m+j) << ' ' << -(i+(n+1)*m+(j-1)*n) << ' ' << -(i+(n+1)*m+j*n) << " 0\n";
+        }
+        if (aux[j-1] == '4') {
+          outfile << (i-1)*m+j << " 0\n";
+          outfile << i*m+j << " 0\n";
+          outfile << i+(n+1)*m+(j-1)*n << " 0\n";
+          outfile << i+(n+1)*m+j*n << " 0\n";
+        }
+      }
+      i++;
+    }
+
     outfile.close();
   }
   infile.close();
