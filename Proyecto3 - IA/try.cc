@@ -33,6 +33,7 @@ int main(int argc, const char **argv) {
       }
     }
     
+    outfile << "c " << line << '\n';
     outfile << "p cnf " << (n+1)*m+n*(m+1) << ' ' << typeIclauses + 24 + ((n-2)*2+(m-2)*2)*4 + ((n-1)*2+(m-1)*2)*6 + ((n-2)*(m-1)+(n-1)*(m-2))*8 << '\n';
     istringstream ss(line);
     ss >> aux;
